@@ -1,0 +1,118 @@
+This is a set of build scripts used to deliver various types of
+automated builds for xen-troops with Jenkins and Yocto
+
+build_prod.py script
+====================
+
+build_prod.py is the runner script for the automated build system.
+There are number of required and optional paramters.
+
+Required paramters
+==================
+
+--build-type - specifies build type to perform:
+  * dailybuild  - perform the build based on HEAD revisions of meta layers,
+                  e.g. this is the latest snapshot
+  * on_push     - perform the build because some of the relevant repositories
+                  has changed due to new commits
+  * on_request  - out of band build was requested, this is equivalent to
+                  forced daily build
+  * reconstruct - perform build which has happened before, e.g. use saved
+                  build history to reconstruct that build
+
+--machine    - specifies machine for which the build is requested to run
+               NOTE: xt-distro will fail if machine requested
+               is not supported
+
+--product    - specifies product to build
+               NOTE: xt-distro will fail if product requested
+               is not supported
+
+Optional arguments
+==================
+
+--with-local-conf     - generate local.conf for the build, e.g. make local.conf
+                        from scratch that fits the requirements of the automated
+                        build.
+                        This is normally used with Jenkins.
+
+--with-do-build       - perform build after initialization. If this option is not
+                        provided then build script stops execution right after it
+                        has made all required preparations for the build, e.g.
+                        all components fetched etc.
+                        This is normally used with Jenkins.
+
+--with-build-history  - during the build collect and save build history in the
+                        git repository, so this build can be reconstructed later
+                        This is normally used with Jenkins.
+
+--continue-build      - continue existing build if any, do not clean up
+                        This must not be used with Jenkins.
+
+--config              - use configuration file for tuning
+
+Configuration file
+==================
+
+In order to tune build script environment one can provide an optional
+configuration file. Sections and values of the configuration file:
+
+  * [git] - this section allows changing:
+    - xt_history_uri             - URI of the build-history repository to use
+    - xt_manifest_uri            - URI of the product manifest repository to use
+
+  * [path]
+    - workspace_base_dir         - this shall be the fastest storage
+                                   for performing all of the build tasks.
+                                   Usually, this is a folder on your SSD drive.
+    - workspace_storage_base_dir - place where artifacts of the build are stored
+                                   This is also used to store downloads and
+                                   shared sstate cache (can be shared with
+                                   other machines as sstate cache mirror).
+
+Example of artifacts placement in the storage folder
+====================================================
+
+build-artifacts
+└── dailybuild
+    ├── 2017-05-26
+        └── prod-devel
+            └── salvator-x
+                ├── 19-10-15
+                    ├── build-system-version_1.0
+                    ├── dom0-image-base
+                    │   ├── build-versions.inc
+                    │   ├── images
+                    │   │   └── m3ulcb-dom0
+                    │   ├── metadata-revs
+                    │   └── sdk
+                    ├── domu-image-minimal
+                    │   ├── build-versions.inc
+                    │   ├── images
+                    │   │   └── m3ulcb-domu
+                    │   ├── metadata-revs
+                    │   └── sdk
+                    ├── logs
+                    │   ├── cooker
+                    │   │   └── salvator-x
+                    │   ├── dom0-image-base
+                    │   └── domu-image-minimal
+                    └── prod-devel-manifest.xml
+
+Example of build history placement in the storage folder
+========================================================
+
+build-history
+├── dailybuild
+    └── 2017-05-27
+        └── prod-devel
+            └── salvator-x
+                └── 09-24-52
+                    ├── build-system-version_1.0
+                    ├── dom0-image-base
+                    │   ├── build-versions.inc
+                    │   └── metadata-revs
+                    ├── domu-image-minimal
+                    │   ├── build-versions.inc
+                    │   └── metadata-revs
+                    └── prod-devel.xml
