@@ -89,9 +89,6 @@ class BuildConf(object):
 	def get_dir_yocto_build(self):
 		return os.path.join(self.get_dir_build(), 'build')
 
-	def get_dir_yocto_rootfs(self):
-		return os.path.join(self.get_dir_yocto_build(), 'rootfs')
-
 	def get_dir_yocto_deploy(self):
 		return os.path.join(self.get_dir_yocto_build(), 'deploy')
 
@@ -102,7 +99,7 @@ class BuildConf(object):
 		return os.path.join(self.get_dir_yocto_build(), 'buildhistory')
 
 	def get_dir_yocto_shared_rootfs(self):
-		return os.path.join(self.get_dir_yocto_rootfs(), 'shared_rootfs')
+		return os.path.join(self.get_dir_yocto_build(), 'shared_rootfs')
 
 	# build options
 	def get_opt_generate_local_conf(self):
