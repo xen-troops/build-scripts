@@ -163,7 +163,6 @@ def build_init(cfg):
 		f = open(os.path.join('build', 'conf', 'local.conf'), "w+t")
 		f.write('MACHINE = "' + cfg.get_opt_machine_type() + '"\n')
 		f.write('DL_DIR = "' + cfg.get_dir_yocto_downloads() + '"\n')
-		f.write('IMAGE_ROOTFS = "' + cfg.get_dir_yocto_rootfs() + '"\n')
 		f.write('DEPLOY_DIR = "' + cfg.get_dir_yocto_deploy() + '"\n')
 		f.write('BUILDHISTORY_DIR = "' + cfg.get_dir_yocto_buildhistory() + '"\n')
 		f.write('XT_SSTATE_CACHE_MIRROR_DIR = "' + cfg.get_dir_yocto_sstate_mirror() + '"\n')
