@@ -45,6 +45,7 @@ CFG_OPTION_XT_MANIFEST = "xt_manifest_uri"
 CFG_SECTION_PATH = "path"
 CFG_OPTION_WORKSPACE_DIR = "workspace_base_dir"
 CFG_OPTION_STORAGE_DIR = "workspace_storage_base_dir"
+CFG_OPTION_CACHE_DIR = "workspace_cache_base_dir"
 
 class BuildConf(object):
 	def get_dir_build(self):
@@ -52,6 +53,9 @@ class BuildConf(object):
 
 	def get_dir_storage(self):
 		return self.__workspace_storage_base_dir
+
+	def get_dir_cache(self):
+		return self.__workspace_cache_base_dir
 
 	# URI of the git repo with build history
 	def get_uri_xt_history(self):
@@ -85,6 +89,9 @@ class BuildConf(object):
 	# so it can be used as SSTATE_MIRROR by others
 	def get_dir_yocto_sstate_mirror(self):
 		return os.path.join(self.get_dir_storage(), 'sstate-cache')
+
+	def get_dir_yocto_sstate(self):
+		return os.path.join(self.get_dir_cache(), 'current-build-cache')
 
 	def get_dir_yocto_build(self):
 		return os.path.join(self.get_dir_build(), 'build')
@@ -182,6 +189,8 @@ class BuildConf(object):
 		self.__workspace_base_dir = os.path.join(os.sep, 'tmp', 'build-ssd')
 		# place where we store files which can be re-used
 		self.__workspace_storage_base_dir = os.path.join(os.sep, 'tmp', 'build-hdd')
+		# place where we store Yocto's sstate and ccache
+		self.__workspace_cache_base_dir = os.path.join(os.sep, 'tmp', 'build-ssd')
 
 		# URI of the git repo with build history
 		self.__xt_history_uri = 'ssh://git@git.epam.com/epmd-aepr/build-history.git'
@@ -197,6 +206,9 @@ class BuildConf(object):
 			uri = config.get(CFG_SECTION_PATH, CFG_OPTION_STORAGE_DIR, 1)
 			if uri:
 				self.__workspace_storage_base_dir = uri
+			uri = config.get(CFG_SECTION_PATH, CFG_OPTION_CACHE_DIR, 1)
+			if uri:
+				self.__workspace_cache_base_dir = uri
 			uri = config.get(CFG_SECTION_GIT, CFG_OPTION_XT_HISTORY, 1)
 			if uri:
 				self.__xt_history_uri = uri
@@ -214,3 +226,4 @@ class BuildConf(object):
 			datetime.datetime.now().strftime('%H-%M-%S'))
 		BuildConf.setup_dir(self.get_dir_build(), not self.__args.continue_build)
 		BuildConf.setup_dir(self.get_dir_storage())
+		BuildConf.setup_dir(self.get_dir_yocto_sstate(), not self.__args.continue_build)

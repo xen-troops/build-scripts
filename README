@@ -69,6 +69,12 @@ configuration file. Sections and values of the configuration file:
                                    This is also used to store downloads and
                                    shared sstate cache (can be shared with
                                    other machines as sstate cache mirror).
+    - workspace_cache_base_dir   - place where Yocto's SSTATE_DIR or ccache's
+                                   cache directories of the build are stored.
+                                   On machines which do not have enough room
+                                   on fast drives to hold both build itself and
+                                   caches this allows distributing those between
+                                   different storages.
 
 Example of artifacts placement in the storage folder
 ====================================================
