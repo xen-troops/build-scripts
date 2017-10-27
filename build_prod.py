@@ -169,6 +169,7 @@ def build_init(cfg):
 		f.write('XT_SSTATE_CACHE_MIRROR_DIR = "' + cfg.get_dir_yocto_sstate_mirror() + '"\n')
 		f.write('XT_SHARED_ROOTFS_DIR = "' + cfg.get_dir_yocto_shared_rootfs() + '"\n')
 		f.write('XT_POPULATE_SDK = "1"\n')
+		f.write('XT_POPULATE_SSTATE_CACHE = "1"\n')
 		f.write('LOG_DIR = "' + cfg.get_dir_yocto_log() + '"\n')
 		f.close()
 	# add meta layers
