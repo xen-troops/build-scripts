@@ -112,6 +112,9 @@ class BuildConf(object):
 	def get_opt_generate_local_conf(self):
 		return self.__args.local_conf
 
+	def get_opt_populate_sdk(self):
+		return self.__args.populate_sdk
+
 	def get_opt_do_build(self):
 		return self.__args.build_run
 
@@ -159,6 +162,9 @@ class BuildConf(object):
 		parser.add_argument('--with-local-conf', action='store_true',
 			dest='local_conf', required=False, default=False,
 			help='Generate local.conf for the build')
+		parser.add_argument('--with-sdk', action='store_true',
+							dest='populate_sdk', required=False, default=False,
+							help='Populate SDK for the build')
 		parser.add_argument('--with-do-build', action='store_true',
 			dest='build_run', required=False, default=False,
 			help='Also build after initialization')
