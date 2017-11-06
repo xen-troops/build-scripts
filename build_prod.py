@@ -122,6 +122,8 @@ def build_populate_artifacts(cfg):
 		artifact_list = list_directories(os.path.join(base_dir, image))
 		for artifact in artifact_list:
 			if artifact in ['images', 'sdk']:
+				if artifact == "sdk" and not cfg.get_opt_populate_sdk():
+					continue
 				src = os.path.join(base_dir, image, artifact)
 				dst = os.path.join(dest, image, artifact)
 				print('\t\tPopulating ' + artifact)
@@ -168,8 +170,8 @@ def build_init(cfg):
 		f.write('SSTATE_DIR = "' + cfg.get_dir_yocto_sstate() + '"\n')
 		f.write('XT_SSTATE_CACHE_MIRROR_DIR = "' + cfg.get_dir_yocto_sstate_mirror() + '"\n')
 		f.write('XT_SHARED_ROOTFS_DIR = "' + cfg.get_dir_yocto_shared_rootfs() + '"\n')
-		f.write('XT_POPULATE_SDK = "1"\n')
-		f.write('XT_POPULATE_SSTATE_CACHE = "1"\n')
+		if cfg.get_opt_populate_sdk():
+			f.write('XT_POPULATE_SDK = "1"\n')
 		f.write('LOG_DIR = "' + cfg.get_dir_yocto_log() + '"\n')
 		f.close()
 	# add meta layers
