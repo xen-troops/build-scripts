@@ -168,7 +168,9 @@ def build_init(cfg):
 		f.write('DEPLOY_DIR = "' + cfg.get_dir_yocto_deploy() + '"\n')
 		f.write('BUILDHISTORY_DIR = "' + cfg.get_dir_yocto_buildhistory() + '"\n')
 		f.write('SSTATE_DIR = "' + cfg.get_dir_yocto_sstate() + '"\n')
-		f.write('XT_SSTATE_CACHE_MIRROR_DIR = "' + cfg.get_dir_yocto_sstate_mirror() + '"\n')
+		if cfg.get_opt_populate_cache():
+			f.write('XT_XT_POPULATE_SSTATE_CACHE = "1"\n')
+			f.write('XT_SSTATE_CACHE_MIRROR_DIR = "' + cfg.get_dir_yocto_sstate_mirror() + '"\n')
 		f.write('XT_SHARED_ROOTFS_DIR = "' + cfg.get_dir_yocto_shared_rootfs() + '"\n')
 		if cfg.get_opt_populate_sdk():
 			f.write('XT_POPULATE_SDK = "1"\n')

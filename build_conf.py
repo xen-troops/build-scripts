@@ -115,6 +115,9 @@ class BuildConf(object):
 	def get_opt_populate_sdk(self):
 		return self.__args.populate_sdk
 
+	def get_opt_populate_cache(self):
+		return self.__args.populate_cache
+
 	def get_opt_do_build(self):
 		return self.__args.build_run
 
@@ -165,6 +168,9 @@ class BuildConf(object):
 		parser.add_argument('--with-sdk', action='store_true',
 							dest='populate_sdk', required=False, default=False,
 							help='Populate SDK for the build')
+		parser.add_argument('--with-sstate-cache', action='store_true',
+                            dest='populate_cache', required=False, default=False,
+                            help='Populate build cache (sstate, ccache)')
 		parser.add_argument('--with-do-build', action='store_true',
 			dest='build_run', required=False, default=False,
 			help='Also build after initialization')
