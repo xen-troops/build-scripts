@@ -168,7 +168,7 @@ class BuildConf(object):
 		parser.add_argument('--with-sdk', action='store_true',
 							dest='populate_sdk', required=False, default=False,
 							help='Populate SDK for the build')
-		parser.add_argument('--with-sstate-cache', action='store_true',
+		parser.add_argument('--with-populate-cache', action='store_true',
                             dest='populate_cache', required=False, default=False,
                             help='Populate build cache (sstate, ccache)')
 		parser.add_argument('--with-do-build', action='store_true',
