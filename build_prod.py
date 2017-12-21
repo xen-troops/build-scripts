@@ -178,6 +178,7 @@ def build_init(cfg):
         print('Generating local.conf')
         f = open(os.path.join('build', 'conf', 'local.conf'), "w+t")
         f.write('MACHINE = "' + cfg.get_opt_machine_type() + '"\n')
+        f.write('BB_NUMBER_THREADS = "1"\n')
         f.write('DL_DIR = "' + cfg.get_dir_yocto_downloads() + '"\n')
         f.write('DEPLOY_DIR = "' + cfg.get_dir_yocto_deploy() + '"\n')
         f.write('BUILDHISTORY_DIR = "' + cfg.get_dir_yocto_buildhistory() + '"\n')
