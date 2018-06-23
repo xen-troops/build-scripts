@@ -51,6 +51,10 @@ Optional arguments
 
 --config              - use configuration file for tuning
 
+--parallel-build      - allow parallel build of domains.
+                        This is useful for building on powerful machines or
+                        build servers.
+
 Configuration file
 ==================
 
