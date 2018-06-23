@@ -137,6 +137,9 @@ class BuildConf(object):
     def get_opt_machine_type(self):
         return self.__args.machine_type
 
+    def get_opt_parallel_build(self):
+        return self.__args.parallel_build
+
     @staticmethod
     def setup_dir(path, remove=False, silent=False):
         # remove the existing one if any
@@ -181,6 +184,9 @@ class BuildConf(object):
         parser.add_argument('--continue-build', action='store_true',
                             dest='continue_build', required=False, default=False,
                             help='Continue existing build if any, do not clean up')
+        parser.add_argument('--parallel-build', action='store_true',
+                            dest='parallel_build', required=False, default=False,
+                            help='Allow parallel building of domains')
         parser.add_argument('--config',
                             dest='config_file', required=False,
                             help="Use configuration file for tuning")
