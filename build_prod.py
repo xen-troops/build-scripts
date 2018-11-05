@@ -192,6 +192,10 @@ def build_init(cfg):
             f.write('XT_POPULATE_SDK = "1"\n')
         f.write('LOG_DIR = "' + cfg.get_dir_yocto_log() + '"\n')
         f.write('XT_PRODUCT_NAME = "' + cfg.get_opt_product_type() +'"\n')
+
+        if cfg.get_opt_local_conf():
+            for item in cfg.get_opt_local_conf():
+                f.write(item[0].upper() + ' = ' + item[1] + '\n')
         f.close()
     # add meta layers
     bblayers_list = list_directories(cfg.get_dir_build())

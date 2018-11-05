@@ -47,6 +47,8 @@ CFG_OPTION_WORKSPACE_DIR = "workspace_base_dir"
 CFG_OPTION_STORAGE_DIR = "workspace_storage_base_dir"
 CFG_OPTION_CACHE_DIR = "workspace_cache_base_dir"
 
+CFG_SECTION_CONF = "local_conf"
+
 
 class BuildConf(object):
     def get_dir_build(self):
@@ -139,6 +141,9 @@ class BuildConf(object):
 
     def get_opt_parallel_build(self):
         return self.__args.parallel_build
+
+    def get_opt_local_conf(self):
+        return self.__xt_local_conf_options
 
     @staticmethod
     def setup_dir(path, remove=False, silent=False):
@@ -238,6 +243,11 @@ class BuildConf(object):
             uri = config.get(CFG_SECTION_GIT, CFG_OPTION_XT_MANIFEST, 1)
             if uri:
                 self.__xt_manifest_uri = uri
+            config_items = config.items(CFG_SECTION_CONF)
+            if config_items:
+                self.__xt_local_conf_options = config_items
+            else:
+                self.__xt_local_conf_options = []
 
     def __init__(self):
         # get build arguments
