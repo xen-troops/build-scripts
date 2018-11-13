@@ -203,6 +203,10 @@ class BuildConf(object):
                                 type=lambda d: datetime.strptime(d, '%H-%M-%S'))
         self.__args = parser.parse_args()
 
+    @staticmethod
+    def expand_path(path):
+        return os.path.normpath(os.path.expandvars(os.path.expanduser(path)))
+
     def set_work_config(self):
         # place where build happens, SSD
         self.__workspace_base_dir = os.path.join(os.sep, 'tmp', 'build-ssd')
@@ -221,13 +225,13 @@ class BuildConf(object):
             config.read(self.__args.config_file)
             uri = config.get(CFG_SECTION_PATH, CFG_OPTION_WORKSPACE_DIR, 1)
             if uri:
-                self.__workspace_base_dir = uri
+                self.__workspace_base_dir = BuildConf.expand_path(uri)
             uri = config.get(CFG_SECTION_PATH, CFG_OPTION_STORAGE_DIR, 1)
             if uri:
-                self.__workspace_storage_base_dir = uri
+                self.__workspace_storage_base_dir = BuildConf.expand_path(uri)
             uri = config.get(CFG_SECTION_PATH, CFG_OPTION_CACHE_DIR, 1)
             if uri:
-                self.__workspace_cache_base_dir = uri
+                self.__workspace_cache_base_dir = BuildConf.expand_path(uri)
             uri = config.get(CFG_SECTION_GIT, CFG_OPTION_XT_HISTORY, 1)
             if uri:
                 self.__xt_history_uri = uri
