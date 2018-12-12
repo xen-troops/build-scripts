@@ -59,9 +59,7 @@ def git_commit(cfg, dir):
     repo.heads.master.checkout()
     repo.git.add('.')
     repo.git.commit(m=cfg.get_dir_buildhistory_rel())
-    print('---------------------- NOT PUSHING TO BUILD HISTORY REPO -------------------')
-    if False:
-        repo.remotes.origin.push()
+    repo.remotes.origin.push()
 
 
 def buildhistory_init(cfg):
