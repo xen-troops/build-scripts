@@ -13,6 +13,10 @@ def list_directories(path):
     return dirnames
 
 
+def list_xml_files(path):
+    return [files for files in os.listdir(path) if files.endswith(".xml")]
+
+
 def copy_file(src, dst, fname):
     src = os.path.join(src, fname)
     dst = os.path.join(dst, fname)
@@ -154,11 +158,16 @@ def build_populate_artifacts(cfg):
         dst = os.path.join(dest, image)
         copy_file(src, dst, build_conf.BUILD_VERSIONS_FNAME)
         copy_file(src, dst, build_conf.BUILD_METADATA_REFS_FNAME)
+        xml_list = list_xml_files(src)
+        for xml in xml_list:
+            copy_file(src, dst, xml)
         # copy to buildhistory git repo
         dst = os.path.join(cfg.get_dir_history_artifacts(), image)
         cfg.setup_dir(dst, remove=True, silent=True)
         copy_file(src, dst, build_conf.BUILD_VERSIONS_FNAME)
         copy_file(src, dst, build_conf.BUILD_METADATA_REFS_FNAME)
+        for xml in xml_list:
+            copy_file(src, dst, xml)
     # logs
     print('Populating logs')
     copy_dir(cfg.get_dir_yocto_log(), os.path.join(dest, 'logs'))
