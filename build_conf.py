@@ -35,6 +35,7 @@ TYPE = [
 
 BUILD_VERSIONS_FNAME = "build-versions.inc"
 BUILD_METADATA_REFS_FNAME = "metadata-revs"
+BUILD_MANIFEST_FNAME = "domain.xml"
 
 YOCTO_DEFAULT_TARGET = "xt-image"
 

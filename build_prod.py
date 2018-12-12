@@ -153,11 +153,13 @@ def build_populate_artifacts(cfg):
         dst = os.path.join(dest, image)
         copy_file(src, dst, build_conf.BUILD_VERSIONS_FNAME)
         copy_file(src, dst, build_conf.BUILD_METADATA_REFS_FNAME)
+        copy_file(src, dst, build_conf.BUILD_MANIFEST_FNAME)
         # copy to buildhistory git repo
         dst = os.path.join(cfg.get_dir_history_artifacts(), image)
         cfg.setup_dir(dst, remove=True, silent=True)
         copy_file(src, dst, build_conf.BUILD_VERSIONS_FNAME)
         copy_file(src, dst, build_conf.BUILD_METADATA_REFS_FNAME)
+        copy_file(src, dst, build_conf.BUILD_MANIFEST_FNAME)
     # logs
     print('Populating logs')
     copy_dir(cfg.get_dir_yocto_log(), os.path.join(dest, 'logs'))
