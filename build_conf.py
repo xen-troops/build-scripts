@@ -148,6 +148,12 @@ class BuildConf(object):
     def get_opt_repo_branch(self):
         return self.__args.repo_branch
 
+    def get_opt_reconstr_date(self):
+        return self.__args.reconstr_date.strftime('%Y-%m-%d')
+
+    def get_opt_reconstr_time(self):
+        return self.__args.reconstr_time.strftime('%H-%M-%S')
+
     @staticmethod
     def setup_dir(path, remove=False, silent=False):
         # remove the existing one if any
@@ -208,11 +214,11 @@ class BuildConf(object):
             parser.add_argument('--date',
                                 dest='reconstr_date', required=True,
                                 help='Date of the build to reconstruct',
-                                type=lambda d: datetime.strptime(d, '%Y-%m-%d'))
+                                type=lambda d: datetime.datetime.strptime(d, '%Y-%m-%d'))
             parser.add_argument('--time',
                                 dest='reconstr_time', required=True,
                                 help='Time of the build to reconstruct',
-                                type=lambda d: datetime.strptime(d, '%H-%M-%S'))
+                                type=lambda d: datetime.datetime.strptime(d, '%H-%M-%S'))
         self.__args = parser.parse_args()
 
     @staticmethod
