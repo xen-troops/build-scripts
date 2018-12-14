@@ -191,6 +191,7 @@ def build_init(cfg):
         f.write('DL_DIR = "' + cfg.get_dir_yocto_downloads() + '"\n')
         f.write('DEPLOY_DIR = "' + cfg.get_dir_yocto_deploy() + '"\n')
         f.write('BUILDHISTORY_DIR = "' + cfg.get_dir_yocto_buildhistory() + '"\n')
+        f.write('BUILDHISTORY_COMMIT = "1"\n')
         f.write('SSTATE_DIR = "' + cfg.get_dir_yocto_sstate() + '"\n')
         f.write('XT_SSTATE_CACHE_MIRROR_DIR = "' + cfg.get_dir_yocto_sstate_mirror() + '"\n')
         if cfg.get_opt_populate_cache():
