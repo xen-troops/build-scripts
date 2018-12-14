@@ -81,11 +81,9 @@ def buildhistory_commit(cfg):
     git_commit(cfg, cfg.get_dir_xt_history())
 
 
-def repo_init(cfg):
+def repo_init(uri, branch, xml_base_name):
     bash_run_command('repo init -u %s -b %s -m %s.xml' %
-                     (cfg.get_uri_xt_manifest(),
-                      cfg.get_opt_repo_branch(),
-                      cfg.get_opt_product_type()))
+                     (uri, branch, xml_base_name))
 
 
 def repo_sync():
@@ -177,12 +175,7 @@ def build_populate_artifacts(cfg):
               repo_populate_manifest_get_fname(cfg))
 
 
-def build_init(cfg):
-    repo_init(cfg)
-    repo_sync()
-    # create build dir and make initial setup
-    yocto_run_command('')
-    if cfg.get_opt_generate_local_conf():
+def generate_local_conf(cfg, reconstruct_dir):
         print('Generating local.conf')
         f = open(os.path.join('build', 'conf', 'local.conf'), "w+t")
         f.write('MACHINE = "' + cfg.get_opt_machine_type() + '"\n')
@@ -201,16 +194,27 @@ def build_init(cfg):
             f.write('XT_POPULATE_SDK = "1"\n')
         f.write('LOG_DIR = "' + cfg.get_dir_yocto_log() + '"\n')
         f.write('XT_PRODUCT_NAME = "' + cfg.get_opt_product_type() +'"\n')
+        if reconstruct_dir:
+            f.write('XT_RECONSTRUCT_DIR = "' + reconstruct_dir + '"\n')
 
         if cfg.get_opt_local_conf():
             for item in cfg.get_opt_local_conf():
                 f.write(item[0].upper() + ' = ' + item[1] + '\n')
         f.close()
-    # add meta layers
+
+
+def add_meta_layers(cfg):
     bblayers_list = list_directories(cfg.get_dir_build())
     for bblayer in bblayers_list:
         if bblayer.startswith('meta-'):
             yocto_add_bblayer(cfg, bblayer)
+
+
+def build_init(uri, branch, xml_base_name):
+    repo_init(uri, branch, xml_base_name)
+    repo_sync()
+    # create build dir and make initial setup
+    yocto_run_command('')
 
 
 def build_run(cfg):
@@ -220,7 +224,14 @@ def build_run(cfg):
     # repo init + sync
     os.chdir(cfg.get_dir_build())
     if not cfg.get_opt_continue_build():
-        build_init(cfg)
+        build_init(cfg.get_uri_xt_manifest(),
+                cfg.get_opt_repo_branch(),
+                cfg.get_opt_product_type())
+        if cfg.get_opt_generate_local_conf():
+            generate_local_conf(cfg, "")
+        # add meta layers
+        add_meta_layers(cfg)
+
     if not (cfg.get_opt_do_build() or cfg.get_opt_continue_build()):
         return
     # ready for the build
@@ -250,6 +261,31 @@ def build_req(cfg):
 
 def build_reconstr(cfg):
     build_print_target(build_conf.TYPE_RECONSTR, cfg)
+    bb_target = build_conf.YOCTO_DEFAULT_TARGET
+    os.chdir(cfg.get_dir_build())
+
+    # construct path to the build history artifacts in the build history repo
+    db_path = os.path.join('dailybuild', cfg.get_opt_reconstr_date(),
+                                 cfg.get_opt_product_type(),
+                                 cfg.get_opt_machine_type(),
+                                 cfg.get_opt_reconstr_time())
+    manifest_file = os.path.join(db_path, cfg.get_opt_product_type())
+    if not cfg.get_opt_continue_build():
+        build_init(cfg.get_uri_xt_history(), cfg.get_opt_repo_branch(),
+                manifest_file)
+        # point the upper Yocto to the folder which contains build history
+        # artifacts
+        history_path = os.path.join(cfg.get_dir_build(),'.repo', 'manifests',
+                db_path)
+        generate_local_conf(cfg, history_path)
+        # add meta layers
+        add_meta_layers(cfg)
+
+    if not (cfg.get_opt_do_build() or cfg.get_opt_continue_build()):
+        return
+    # ready for the build
+    yocto_run_command('bitbake ' + bb_target)
+    build_populate_artifacts(cfg)
 
 
 def main():
