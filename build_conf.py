@@ -145,6 +145,9 @@ class BuildConf(object):
     def get_opt_local_conf(self):
         return self.__xt_local_conf_options
 
+    def get_opt_repo_branch(self):
+        return self.__args.repo_branch
+
     @staticmethod
     def setup_dir(path, remove=False, silent=False):
         # remove the existing one if any
@@ -195,6 +198,10 @@ class BuildConf(object):
         parser.add_argument('--config',
                             dest='config_file', required=False,
                             help="Use configuration file for tuning")
+        parser.add_argument('--branch',
+                            dest='repo_branch', required=False,
+                            default='master',
+                            help="Use product's manifest from the branch specified")
         known_args, other_args = parser.parse_known_args()
         # now that we know which build it is we can add appropriate options
         if known_args.build_type == TYPE_RECONSTR:

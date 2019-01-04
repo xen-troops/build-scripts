@@ -81,7 +81,8 @@ def buildhistory_commit(cfg):
 
 def repo_init(cfg):
     bash_run_command('repo init -u %s -b %s -m %s.xml' %
-                     (cfg.get_uri_xt_manifest(), 'master',
+                     (cfg.get_uri_xt_manifest(),
+                      cfg.get_opt_repo_branch(),
                       cfg.get_opt_product_type()))
 
 
