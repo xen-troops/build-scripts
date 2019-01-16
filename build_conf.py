@@ -256,11 +256,13 @@ class BuildConf(object):
             uri = config.get(CFG_SECTION_GIT, CFG_OPTION_XT_MANIFEST, 1)
             if uri:
                 self.__xt_manifest_uri = uri
-            config_items = config.items(CFG_SECTION_CONF)
-            if config_items:
-                self.__xt_local_conf_options = config_items
-            else:
-                self.__xt_local_conf_options = []
+            self.__xt_local_conf_options = []
+            try:
+                config_items = config.items(CFG_SECTION_CONF)
+                if config_items:
+                    self.__xt_local_conf_options = config_items
+            except ConfigParser.NoSectionError:
+                pass
 
     def __init__(self):
         # get build arguments
