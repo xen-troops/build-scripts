@@ -55,6 +55,14 @@ Optional arguments
                         This is useful for building on powerful machines or
                         build servers.
 
+--retain-sstate       - Normally if a new build is started (either with
+                        --with-do-build or without --continue-build) SSTATE_DIR
+                        is removed. If retain argument is provided it is
+                        guaranteed that SSTATE directory is not removed then.
+                        This behaviour is intended for local (non build server)
+                        builds where state caches use is preferred over clean
+                        environment for every day development.
+
 Configuration file
 ==================
 
