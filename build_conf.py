@@ -154,6 +154,9 @@ class BuildConf(object):
     def get_opt_reconstr_time(self):
         return self.__args.reconstr_time.strftime('%H-%M-%S')
 
+    def get_prod_pulls(self):
+        return self.__args.prod_pulls
+
     @staticmethod
     def setup_dir(path, remove=False, silent=False):
         # remove the existing one if any
@@ -208,6 +211,10 @@ class BuildConf(object):
                             dest='repo_branch', required=False,
                             default='master',
                             help="Use product's manifest from the branch specified")
+        parser.add_argument('--prod_pulls',
+                            dest='prod_pulls', required=False, default=False,
+                            help="Use to define the list of the pull-requests for product's meta layer.")
+
         known_args, other_args = parser.parse_known_args()
         # now that we know which build it is we can add appropriate options
         if known_args.build_type == TYPE_RECONSTR:

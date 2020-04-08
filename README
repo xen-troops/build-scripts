@@ -55,6 +55,9 @@ Optional arguments
                         This is useful for building on powerful machines or
                         build servers.
 
+--prod_pulls          - allow define the list of the pull requests applied to 
+                        the product's meta layer. Example: --prod_pulls "181,245"
+
 Configuration file
 ==================
 
