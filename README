@@ -5,9 +5,9 @@ build_prod.py script
 ====================
 
 build_prod.py is the runner script for the automated build system.
-There are number of required and optional paramters.
+There are number of required and optional parameters.
 
-Required paramters
+Required parameters
 ==================
 
 --machine    - specifies machine for which the build is requested to run
@@ -18,8 +18,8 @@ Required paramters
                NOTE: xt-distro will fail if product requested
                is not supported
 
-Optional arguments
-==================
+Optional parameters
+===================
 
 --build-type - specifies build type to perform:
   * dailybuild        - perform the build based on HEAD revisions of meta layers,
