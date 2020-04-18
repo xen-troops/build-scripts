@@ -174,8 +174,9 @@ class BuildConf(object):
     def __parse_args(self):
         parser = argparse.ArgumentParser()
         required = parser.add_argument_group('required arguments')
-        required.add_argument('--build-type', choices=TYPE,
-                              dest='build_type', required=True, help='Build type')
+        parser.add_argument('--build-type', choices=TYPE,
+                             dest='build_type', required=False, default=TYPE_DAILY,
+                             help='Build type')
         required.add_argument('--machine',
                               dest='machine_type', required=True, help='Machine type')
         required.add_argument('--product',
