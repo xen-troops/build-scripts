@@ -10,16 +10,6 @@ There are number of required and optional paramters.
 Required paramters
 ==================
 
---build-type - specifies build type to perform:
-  * dailybuild  - perform the build based on HEAD revisions of meta layers,
-                  e.g. this is the latest snapshot
-  * on_push     - perform the build because some of the relevant repositories
-                  has changed due to new commits
-  * on_request  - out of band build was requested, this is equivalent to
-                  forced daily build
-  * reconstruct - perform build which has happened before, e.g. use saved
-                  build history to reconstruct that build
-
 --machine    - specifies machine for which the build is requested to run
                NOTE: xt-distro will fail if machine requested
                is not supported
@@ -30,6 +20,17 @@ Required paramters
 
 Optional arguments
 ==================
+
+--build-type - specifies build type to perform:
+  * dailybuild        - perform the build based on HEAD revisions of meta layers,
+                        e.g. this is the latest snapshot.
+                        This is the default behaviour if build-type is not specified.
+  * on_push           - perform the build because some of the relevant repositories
+                        has changed due to new commits
+  * on_request        - out of band build was requested, this is equivalent to
+                        forced daily build
+  * reconstruct       - perform build which has happened before, e.g. use saved
+                        build history to reconstruct that build
 
 --with-local-conf     - generate local.conf for the build, e.g. make local.conf
                         from scratch that fits the requirements of the automated
