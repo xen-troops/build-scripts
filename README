@@ -56,6 +56,9 @@ Optional parameters
                         This is useful for building on powerful machines or
                         build servers.
 
+--prod_pulls          - allow define the list of the pull requests applied to 
+                        the product's meta layer. Example: --prod_pulls "181,245"
+
 --retain-sstate       - Normally if a new build is started (either with
                         --with-do-build or without --continue-build) SSTATE_DIR
                         is removed. If retain argument is provided it is
