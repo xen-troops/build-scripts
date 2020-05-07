@@ -177,8 +177,9 @@ class BuildConf(object):
     def __parse_args(self):
         parser = argparse.ArgumentParser()
         required = parser.add_argument_group('required arguments')
-        required.add_argument('--build-type', choices=TYPE,
-                              dest='build_type', required=True, help='Build type')
+        parser.add_argument('--build-type', choices=TYPE,
+                             dest='build_type', required=False, default=TYPE_DAILY,
+                             help='Build type')
         required.add_argument('--machine',
                               dest='machine_type', required=True, help='Machine type')
         required.add_argument('--product',
@@ -201,6 +202,9 @@ class BuildConf(object):
         parser.add_argument('--continue-build', action='store_true',
                             dest='continue_build', required=False, default=False,
                             help='Continue existing build if any, do not clean up')
+        parser.add_argument('--retain-sstate', action='store_true',
+                            dest='retain_sstate', required=False, default=False,
+                            help='Do not remove SSTATE_DIR at any circumstances')
         parser.add_argument('--parallel-build', action='store_true',
                             dest='parallel_build', required=False, default=False,
                             help='Allow parallel building of domains')
@@ -281,4 +285,4 @@ class BuildConf(object):
                                                    datetime.datetime.now().strftime('%H-%M-%S'))
         BuildConf.setup_dir(self.get_dir_build(), not self.__args.continue_build)
         BuildConf.setup_dir(self.get_dir_storage())
-        BuildConf.setup_dir(self.get_dir_yocto_sstate(), not self.__args.continue_build)
+        BuildConf.setup_dir(self.get_dir_yocto_sstate(), not (self.__args.continue_build or self.__args.retain_sstate))

@@ -5,20 +5,10 @@ build_prod.py script
 ====================
 
 build_prod.py is the runner script for the automated build system.
-There are number of required and optional paramters.
+There are number of required and optional parameters.
 
-Required paramters
+Required parameters
 ==================
-
---build-type - specifies build type to perform:
-  * dailybuild  - perform the build based on HEAD revisions of meta layers,
-                  e.g. this is the latest snapshot
-  * on_push     - perform the build because some of the relevant repositories
-                  has changed due to new commits
-  * on_request  - out of band build was requested, this is equivalent to
-                  forced daily build
-  * reconstruct - perform build which has happened before, e.g. use saved
-                  build history to reconstruct that build
 
 --machine    - specifies machine for which the build is requested to run
                NOTE: xt-distro will fail if machine requested
@@ -28,8 +18,19 @@ Required paramters
                NOTE: xt-distro will fail if product requested
                is not supported
 
-Optional arguments
-==================
+Optional parameters
+===================
+
+--build-type - specifies build type to perform:
+  * dailybuild        - perform the build based on HEAD revisions of meta layers,
+                        e.g. this is the latest snapshot.
+                        This is the default behaviour if build-type is not specified.
+  * on_push           - perform the build because some of the relevant repositories
+                        has changed due to new commits
+  * on_request        - out of band build was requested, this is equivalent to
+                        forced daily build
+  * reconstruct       - perform build which has happened before, e.g. use saved
+                        build history to reconstruct that build
 
 --with-local-conf     - generate local.conf for the build, e.g. make local.conf
                         from scratch that fits the requirements of the automated
@@ -57,6 +58,14 @@ Optional arguments
 
 --prod_pulls          - allow define the list of the pull requests applied to 
                         the product's meta layer. Example: --prod_pulls "181,245"
+
+--retain-sstate       - Normally if a new build is started (either with
+                        --with-do-build or without --continue-build) SSTATE_DIR
+                        is removed. If retain argument is provided it is
+                        guaranteed that SSTATE directory is not removed then.
+                        This behaviour is intended for local (non build server)
+                        builds where state caches use is preferred over clean
+                        environment for every day development.
 
 Configuration file
 ==================
