@@ -259,26 +259,27 @@ def build_init(uri, branch, xml_base_name, proposed):
 
     repo_init(uri, branch, xml_base_name)
     repo_sync()
-    c_dir = os.getcwd()
-    # go into prod layer directory to get the repo instance 
-    # and create the remote.
-    # (It is required to apply the pull request).
-    os.chdir('meta-xt-{}'.format(xml_base_name))
-    # Get url of prod-layer to find the pull requests
-    # The name of repository is known but organization - not
-    # The organization can be extracted from theurl of layer 'meta-xt-products'
-    # Assumption:the layers  products and prod belong 
-    # to the same organization    
-    url = "xen-troops/meta-xt-" + xml_base_name
-    repo = git.Repo('./')
-    repo.create_remote('pull_req_source', url='git://github.com/{}'.format(url))
-    # checkout the required branch
-    repo.git.checkout('HEAD', b='{}'.format(branch)) 
-    process_pulls(url, proposed)
-    # rollback the current directory
-    os.chdir(c_dir)
+    if proposed:
+        c_dir = os.getcwd()
+        # go into prod layer directory to get the repo instance
+        # and create the remote.
+        # (It is required to apply the pull request).
+        os.chdir('meta-xt-{}'.format(xml_base_name))
+        # Get url of prod-layer to find the pull requests
+        # The name of repository is known but organization - not
+        # The organization can be extracted from the url of layer 'meta-xt-products'
+        # Assumption:the layers  products and prod belong
+        # to the same organization
+        url = "xen-troops/meta-xt-" + xml_base_name
+        repo = git.Repo('./')
+        repo.create_remote('pull_req_source', url='git://github.com/{}'.format(url))
+        # checkout the required branch
+        repo.git.checkout('HEAD', b='{}'.format(branch))
+        process_pulls(url, proposed)
+        # rollback the current directory
+        os.chdir(c_dir)
     # create build dir and make initial setup
-    #yocto_run_command('')
+    yocto_run_command('')
 
 
 def build_run(cfg):
