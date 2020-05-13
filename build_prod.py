@@ -49,7 +49,7 @@ def copy_dir(src, dst):
 def bash_run_command(cmd):
     ret = subprocess.call("bash -c '%s'" % cmd, shell=True)
     if ret != 0:
-        raise Exception('Failed to run ' + cmd + ': ' + str(ret))
+        raise Exception('Failed to run "' + cmd + '", error code: ' + str(ret))
 
 # block to work with pull requests
 
