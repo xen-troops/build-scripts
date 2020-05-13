@@ -364,6 +364,8 @@ def main():
             build_conf.TYPE_RECONSTR: build_reconstr,
         }
         action[cfg.get_opt_build_type()](cfg)
+    except Exception as e:
+        print e
     finally:
         print("Done")
 
