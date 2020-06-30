@@ -260,6 +260,7 @@ def build_init(uri, branch, xml_base_name, proposed):
     repo_init(uri, branch, xml_base_name)
     repo_sync()
     if proposed:
+        print('Applying pull requests: %s ...' % proposed)
         c_dir = os.getcwd()
         # go into prod layer directory to get the repo instance
         # and create the remote.
@@ -364,10 +365,10 @@ def main():
             build_conf.TYPE_RECONSTR: build_reconstr,
         }
         action[cfg.get_opt_build_type()](cfg)
+        print("Done")
     except Exception as e:
         print e
-    finally:
-        print("Done")
+        print "FAILED"
 
 
 if __name__ == '__main__':
