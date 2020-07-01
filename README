@@ -32,6 +32,11 @@ Optional parameters
   * reconstruct       - perform build which has happened before, e.g. use saved
                         build history to reconstruct that build
 
+--branch              - specify branch of product manifest.
+                        Repo with product manifest is specified as 'xt_manifest_uri'
+                        in configuration file, provided by '--config'.
+                        Default value is 'master'.
+
 --with-local-conf     - generate local.conf for the build, e.g. make local.conf
                         from scratch that fits the requirements of the automated
                         build.
