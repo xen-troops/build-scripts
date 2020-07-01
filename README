@@ -21,7 +21,7 @@ Required parameters
 Optional parameters
 ===================
 
---build-type - specifies build type to perform:
+--build-type          - specifies build type to perform:
   * dailybuild        - perform the build based on HEAD revisions of meta layers,
                         e.g. this is the latest snapshot.
                         This is the default behaviour if build-type is not specified.
