@@ -2,7 +2,6 @@ import git
 import os
 import shutil
 import subprocess
-from github import Github
 import build_conf
 import re
 
@@ -53,45 +52,28 @@ def bash_run_command(cmd):
 
 # block to work with pull requests
 
-def verify_pulls(existed, proposed, uri):
-    print('Verifying of the proposed pulls: {}'.format(proposed))
-    for pr in proposed:
-         print('Verifying {}'.format(pr))
-         if not pr in existed:
-             print('Pull request {} does not exist in {} repository.'.format(pr, uri))
-             return False
-    return True
-
-
-def get_pulls_for(uri):
-    print('Getting the pulls for {}'.format(uri))
-    g = Github()
-    repo = g.get_repo(uri)
-    pulls = repo.get_pulls(state='open', sort='created', base='master')
-    res = []
-    for pr in pulls:
-        res.append(pr.number)
-    return res
-
-def handle_pulls_input(inputstr):
-    inputstr = ''.join(inputstr.split())
-    return list(map(int, inputstr.split(",")))
-
-
-def apply_pulls(proposed):
+def process_pulls(xml_base_name, proposed):
+    print('Applying pull requests: %s ...' % proposed)
+    c_dir = os.getcwd()
+    # go into prod layer directory to get the repo instance
+    # and create the remote.
+    # (It is required to apply the pull request).
+    os.chdir('meta-xt-{}'.format(xml_base_name))
+    # Get url of prod-layer to find the pull requests
+    # The name of repository is known but organization - not
+    # The organization can be extracted from the url of layer 'meta-xt-products'
+    # Assumption:the layers  products and prod belong
+    # to the same organization
+    url = "xen-troops/meta-xt-" + xml_base_name
+    repo = git.Repo('./')
+    repo.create_remote('pull_req_source', url='git://github.com/{}'.format(url))
+    proposed = proposed.split(",")
     for pull in proposed:
         print('Applying pull request {}'.format(pull))
+        pull.strip()
         bash_run_command('git pull pull_req_source pull/%s/head --rebase' % (pull))
-
-
-def process_pulls(uri, proposed):
-    proposed = handle_pulls_input(proposed)
-    existed = get_pulls_for(uri)
-    if verify_pulls(existed, proposed, uri):
-        apply_pulls(proposed)
-        return True
-
-    return False
+    # rollback the current directory
+    os.chdir(c_dir)
 
 # end of pull requests block
 
@@ -260,25 +242,7 @@ def build_init(uri, branch, xml_base_name, proposed):
     repo_init(uri, branch, xml_base_name)
     repo_sync()
     if proposed:
-        print('Applying pull requests: %s ...' % proposed)
-        c_dir = os.getcwd()
-        # go into prod layer directory to get the repo instance
-        # and create the remote.
-        # (It is required to apply the pull request).
-        os.chdir('meta-xt-{}'.format(xml_base_name))
-        # Get url of prod-layer to find the pull requests
-        # The name of repository is known but organization - not
-        # The organization can be extracted from the url of layer 'meta-xt-products'
-        # Assumption:the layers  products and prod belong
-        # to the same organization
-        url = "xen-troops/meta-xt-" + xml_base_name
-        repo = git.Repo('./')
-        repo.create_remote('pull_req_source', url='git://github.com/{}'.format(url))
-        # checkout the required branch
-        repo.git.checkout('HEAD', b='{}'.format(branch))
-        process_pulls(url, proposed)
-        # rollback the current directory
-        os.chdir(c_dir)
+        process_pulls(xml_base_name, proposed)
     # create build dir and make initial setup
     yocto_run_command('')
 
