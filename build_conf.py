@@ -1,9 +1,9 @@
 import argparse
 import datetime
 import os
+import errno
 import shutil
-
-import ConfigParser
+import configparser
 
 # define build script version file name: this is created
 # in the deploy dir after successfull build
@@ -165,13 +165,13 @@ class BuildConf(object):
                 print('Removing ' + path)
             try:
                 shutil.rmtree(path)
-            except OSError, err:
-                if err.errno != os.errno.ENOENT:
+            except OSError as err:
+                if err.errno != errno.ENOENT:
                     raise
         try:
             os.makedirs(path)
-        except OSError, err:
-            if err.errno != os.errno.EEXIST:
+        except OSError as err:
+            if err.errno != errno.EEXIST:
                 raise
 
     def __parse_args(self):
@@ -250,21 +250,22 @@ class BuildConf(object):
         self.__xt_manifest_uri = 'https://github.com/xen-troops/meta-xt-products.git'
 
         if self.__args.config_file:
-            config = ConfigParser.ConfigParser()
+            config = configparser.ConfigParser()
             config.read(self.__args.config_file)
-            uri = config.get(CFG_SECTION_PATH, CFG_OPTION_WORKSPACE_DIR, 1)
+            uri = config.get(CFG_SECTION_PATH, CFG_OPTION_WORKSPACE_DIR, raw = True)
             if uri:
                 self.__workspace_base_dir = BuildConf.expand_path(uri)
-            uri = config.get(CFG_SECTION_PATH, CFG_OPTION_STORAGE_DIR, 1)
+            uri = config.get(CFG_SECTION_PATH, CFG_OPTION_STORAGE_DIR, raw = True)
             if uri:
                 self.__workspace_storage_base_dir = BuildConf.expand_path(uri)
-            uri = config.get(CFG_SECTION_PATH, CFG_OPTION_CACHE_DIR, 1)
+            uri = config.get(CFG_SECTION_PATH, CFG_OPTION_CACHE_DIR, raw = True)
+            print(uri)
             if uri:
                 self.__workspace_cache_base_dir = BuildConf.expand_path(uri)
-            uri = config.get(CFG_SECTION_GIT, CFG_OPTION_XT_HISTORY, 1)
+            uri = config.get(CFG_SECTION_GIT, CFG_OPTION_XT_HISTORY, raw = True)
             if uri:
                 self.__xt_history_uri = uri
-            uri = config.get(CFG_SECTION_GIT, CFG_OPTION_XT_MANIFEST, 1)
+            uri = config.get(CFG_SECTION_GIT, CFG_OPTION_XT_MANIFEST, raw = True)
             if uri:
                 self.__xt_manifest_uri = uri
             self.__xt_local_conf_options = []
@@ -272,7 +273,7 @@ class BuildConf(object):
                 config_items = config.items(CFG_SECTION_CONF)
                 if config_items:
                     self.__xt_local_conf_options = config_items
-            except ConfigParser.NoSectionError:
+            except configparser.NoSectionError:
                 pass
 
     def __init__(self):
