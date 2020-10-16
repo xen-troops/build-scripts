@@ -1,0 +1,8 @@
+{
+    "id": "{id}",
+    "fileName": "{fileName}",
+    "version": "{version}",
+    "description": "{description}",
+    "requiredVersion": "optional",
+    "minimalVersion": "optional"
+}
