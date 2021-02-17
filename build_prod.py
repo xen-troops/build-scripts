@@ -5,6 +5,7 @@ import subprocess
 from github import Github
 import build_conf
 import re
+import errno
 
 def list_directories(path):
     dirnames = [files for files in os.listdir(path) if os.path.isdir(os.path.join(path, files))]
@@ -22,27 +23,27 @@ def copy_file(src, dst, fname):
     dst = os.path.join(dst, fname)
     try:
         os.remove(dst)
-    except OSError, err:
-        if err.errno != os.errno.ENOENT:
+    except OSError as err:
+        if err.errno != errno.ENOENT:
             raise
     try:
         # copy with file stats
         shutil.copy2(src, dst)
-    except IOError, err:
-        if err.errno != os.errno.ENOENT:
+    except IOError as err:
+        if err.errno != errno.ENOENT:
             raise
 
 
 def copy_dir(src, dst):
     try:
         shutil.rmtree(dst)
-    except OSError, err:
-        if err.errno != os.errno.ENOENT:
+    except OSError as err:
+        if err.errno != errno.ENOENT:
             raise
     try:
         shutil.copytree(src, dst, True)
-    except OSError, err:
-        if err.errno != os.errno.ENOENT:
+    except OSError as err:
+        if err.errno != errno.ENOENT:
             raise
 
 
@@ -386,8 +387,8 @@ def main():
         action[cfg.get_opt_build_type()](cfg)
         print("Done")
     except Exception as e:
-        print e
-        print "FAILED"
+        print (e)
+        print ("FAILED")
 
 
 if __name__ == '__main__':
