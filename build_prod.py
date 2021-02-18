@@ -242,7 +242,10 @@ def generate_local_conf(cfg, reconstruct_dir):
 
         if cfg.get_opt_local_conf():
             for item in cfg.get_opt_local_conf():
-                f.write(item[0].upper() + ' = ' + item[1] + '\n')
+                if item[1]:
+                    f.write(item[0].upper() + ' = ' + item[1] + '\n')
+                else:
+                    f.write(item[0].upper() + ' = ""\n')
         f.close()
 
 
