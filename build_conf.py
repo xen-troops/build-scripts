@@ -37,6 +37,7 @@ BUILD_VERSIONS_FNAME = "build-versions.inc"
 BUILD_METADATA_REFS_FNAME = "metadata-revs"
 
 YOCTO_DEFAULT_TARGET = "xt-image"
+YOCTO_UPDATE_TARGET = "xt-update"
 
 CFG_SECTION_GIT = "git"
 CFG_OPTION_XT_HISTORY = "xt_history_uri"
@@ -156,6 +157,9 @@ class BuildConf(object):
 
     def get_prod_pulls(self):
         return self.__args.prod_pulls
+    
+    def get_opt_generate_update(self):
+        return self.__args.generate_update
 
     @staticmethod
     def setup_dir(path, remove=False, silent=False):
@@ -218,6 +222,10 @@ class BuildConf(object):
         parser.add_argument('--prod_pulls',
                             dest='prod_pulls', required=False, default=False,
                             help="Use to define the list of the pull-requests for product's meta layer.")
+        parser.add_argument('--generate-update',action='store_true',
+                            dest='generate_update', required=False, default=False,
+                            help='Generate update bundle to perform SOTA/FOTA update')
+
 
         known_args, other_args = parser.parse_known_args()
         # now that we know which build it is we can add appropriate options
@@ -283,6 +291,6 @@ class BuildConf(object):
                                                    datetime.date.today().strftime('%Y-%m-%d'),
                                                    self.get_opt_product_type(), self.get_opt_machine_type(),
                                                    datetime.datetime.now().strftime('%H-%M-%S'))
-        BuildConf.setup_dir(self.get_dir_build(), not self.__args.continue_build)
+        BuildConf.setup_dir(self.get_dir_build(), not (self.__args.continue_build or self.__args.generate_update))
         BuildConf.setup_dir(self.get_dir_storage())
-        BuildConf.setup_dir(self.get_dir_yocto_sstate(), not (self.__args.continue_build or self.__args.retain_sstate))
+        BuildConf.setup_dir(self.get_dir_yocto_sstate(), not (self.__args.continue_build or self.__args.retain_sstate or self.__args.generate_update))

@@ -289,10 +289,12 @@ def build_init(uri, branch, xml_base_name, proposed):
 def build_run(cfg):
     buildhistory_init(cfg)
     bb_target = build_conf.YOCTO_DEFAULT_TARGET
-    print('Building bitbake target: ' + bb_target)
+    if cfg.get_opt_generate_update():
+        bb_target = build_conf.YOCTO_UPDATE_TARGET
+    
     # repo init + sync
     os.chdir(cfg.get_dir_build())
-    if not cfg.get_opt_continue_build():
+    if not (cfg.get_opt_continue_build() or cfg.get_opt_generate_update()):
         build_init(cfg.get_uri_xt_manifest(),
                 cfg.get_opt_repo_branch(),
                 cfg.get_opt_product_type(),
@@ -302,8 +304,11 @@ def build_run(cfg):
         # add meta layers
         add_meta_layers(cfg)
 
-    if not (cfg.get_opt_do_build() or cfg.get_opt_continue_build()):
+    if not (cfg.get_opt_do_build() or cfg.get_opt_continue_build() or cfg.get_opt_generate_update()):
         return
+
+    print('Building bitbake target: ' + bb_target)
+
     # ready for the build
     yocto_run_command('bitbake ' + bb_target)
     repo_populate_manifest(cfg)
