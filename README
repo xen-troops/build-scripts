@@ -72,6 +72,8 @@ Optional parameters
                         builds where state caches use is preferred over clean
                         environment for every day development.
 
+--generate-update     - generate update package to perform SOTA/FOTA update
+
 Configuration file
 ==================
 
