@@ -243,7 +243,10 @@ def generate_local_conf(cfg, reconstruct_dir):
         if cfg.get_opt_local_conf():
             for item in cfg.get_opt_local_conf():
                 if item[1]:
-                    f.write(item[0].upper() + ' = ' + item[1] + '\n')
+                    # Try expanding the argument if it uses environment vars
+                    # This also works for non-path arguments
+                    f.write(item[0].upper() + ' = ' +
+                            cfg.expand_path(item[1]) + '\n')
                 else:
                     f.write(item[0].upper() + ' = ""\n')
         f.close()
