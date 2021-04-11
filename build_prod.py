@@ -221,6 +221,14 @@ def build_populate_artifacts(cfg):
 def generate_local_conf(cfg, reconstruct_dir):
         print('Generating local.conf')
         f = open(os.path.join('build', 'conf', 'local.conf'), "w+t")
+        # find the prod local conf
+        local_conf = cfg.get_dir_build() + '//meta-xt-{}//doc//local.conf.{}'.format(cfg.get_opt_product_type(), cfg.get_opt_product_type())
+
+        if os.path.isfile(local_conf):
+            prod_file = open(local_conf, 'r')
+            f.write(prod_file.read())
+            prod_file.close()
+
         f.write('MACHINE = "' + cfg.get_opt_machine_type() + '"\n')
         if not cfg.get_opt_parallel_build():
             f.write('BB_NUMBER_THREADS = "1"\n')
