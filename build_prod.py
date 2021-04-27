@@ -125,8 +125,9 @@ def buildhistory_commit(cfg):
 
 
 def repo_init(uri, branch, xml_base_name):
+    prod_manifest_path = xml_base_name.replace("-", "_") + "/" + xml_base_name
     bash_run_command('repo init -u %s -b %s -m %s.xml' %
-                     (uri, branch, xml_base_name))
+                     (uri, branch, prod_manifest_path))
 
 
 def repo_sync():
